@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Designer & Frontend Developer Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        sv: {
+                            /* 60% Dominant - Environmental Foundation */
+                            base: '#0B0914', 
+                            /* 30% Secondary - Structural Support */
+                            surface: '#1E1838',
+                            border: '#32285A',
+                            /* 10% Accent - Focal Points & Characters */
+                            accent: '#FF2156',
+                            cyan: '#00F0FF'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            overflow-x: hidden;
+        }
+
+        body {
+            background-color: #0B0914; /* 60% Dominant */
+            color: #f1f5f9;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle Halftone Comic Pattern (Spider-Verse texture) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: radial-gradient(#32285A 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.15;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0B0914; }
+        ::-webkit-scrollbar-thumb { background: #32285A; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF2156; }
+
+        /* Utilities */
+        .text-gradient {
+            /* Using the 10% accent colors for chromatic pop */
+            background: linear-gradient(135deg, #FF2156 0%, #00F0FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 30% Structural Glassmorphism */
+        .glass {
+            background: rgba(30, 24, 56, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(50, 40, 90, 0.8);
+        }
+
+        /* 10% Accent Background Glows */
+        .bg-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        /* Project Card Interactions */
+        .project-img-wrapper { overflow: hidden; }
+        .project-img-wrapper img {
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .project-card:hover .project-img-wrapper img {
+            transform: scale(1.05);
+        }
+        
+        /* Chromatic Aberration Hover Effect on Cards */
+        .project-card { transition: all 0.3s ease; }
+        .project-card:hover {
+            box-shadow: -4px 4px 0px 0px rgba(0, 240, 255, 0.3), 
+                         4px -4px 0px 0px rgba(255, 33, 86, 0.3);
+            border-color: rgba(255, 33, 86, 0.5);
+        }
+
+        /* Initial GSAP States */
+        .reveal-up { opacity: 0; transform: translateY(40px); }
+        .hero-elem { opacity: 0; transform: translateY(30px); }
+    </style>
+</head>
+<body class="antialiased selection:bg-sv-accent selection:text-white">
+
+    <!-- Multiverse Glows (10% Accent Colors scattered softly) -->
+    <div class="bg-glow w-[500px] h-[500px] bg-sv-accent top-[-10%] left-[-10%]"></div>
+    <div class="bg-glow w-[600px] h-[600px] bg-sv-cyan top-[40%] right-[-10%]"></div>
+
+    <!-- Navigation (30% Structure on Scroll) -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-5">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between min-w-0">
+            <a href="#" class="text-xl font-bold tracking-tight flex-shrink-0">
+                Dzung<span class="text-sv-accent">.</span>Tech
+            </a>
+
+            <!-- Mobile menu button -->
+            <button id="menu-toggle" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-slate-200 hover:text-white hover:bg-sv-surface transition">
+                <span class="sr-only">Toggle menu</span>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+
+            <!-- Mobile menu panel -->
+            <div id="mobile-menu" class="absolute inset-x-0 top-full mt-1 bg-sv-base/95 backdrop-blur-md border-t border-sv-border md:hidden hidden">
+                <div class="px-6 py-5 flex flex-col gap-4">
+                    <a href="#about" class="text-sm font-medium text-slate-300 hover:text-sv-cyan transition-colors">About</a>
+                    <a href="#portfolio" class="text-sm font-medium text-slate-300 hover:text-sv-cyan transition-colors">Work</a>
+                    <a href="#process" class="text-sm font-medium text-slate-300 hover:text-sv-cyan transition-colors">Process</a>
+                    <a href="#contact" class="px-6 py-3 rounded-full text-sm font-bold bg-white text-sv-base hover:bg-sv-accent hover:text-white transition-all shadow-[0_0_15px_rgba(255,33,86,0.0)] hover:shadow-[0_0_20px_rgba(255,33,86,0.4)]">
+                        Let's Talk
+                    </a>
+                </div>
+            </div>
+
+            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
+                <a href="#about" class="hover:text-sv-cyan transition-colors">About</a>
+                <a href="#portfolio" class="hover:text-sv-cyan transition-colors">Work</a>
+                <a href="#process" class="hover:text-sv-cyan transition-colors">Process</a>
+            </div>
+            <!-- 10% Accent Focus -->
+            <a href="#contact" class="hidden md:inline-flex px-6 py-2.5 rounded-full text-sm font-bold bg-white text-sv-base hover:bg-sv-accent hover:text-white transition-all shadow-[0_0_15px_rgba(255,33,86,0.0)] hover:shadow-[0_0_20px_rgba(255,33,86,0.4)]">
+                Let's Talk
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 px-6">
+        <div class="max-w-4xl mx-auto text-center z-10">
+            <!-- 30% structural pill with 10% accent dot -->
+            <div class="hero-elem inline-flex items-center space-x-2 glass px-4 py-2 rounded-full mb-8">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sv-accent opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-sv-accent"></span>
+                </span>
+                <span class="text-xs font-semibold text-slate-300 uppercase tracking-widest">Available for new projects</span>
+            </div>
+            
+            <h1 class="hero-elem text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter leading-tight mb-6">
+                Web Designer & <br>
+                <span class="text-gradient">Frontend Developer</span>
+            </h1>
+            
+            <p class="hero-elem text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                I design and build modern, high-converting landing pages that help businesses attract more customers and cut through the multidimensional noise.
+            </p>
+            
+            <div class="hero-elem flex flex-col sm:flex-row items-center justify-center gap-4">
+                <!-- 10% Accent CTA -->
+                <a href="#portfolio" class="w-full sm:w-auto px-8 py-4 bg-sv-accent hover:bg-[#E01748] text-white rounded-full font-bold transition-all transform hover:scale-105 shadow-[0_0_25px_rgba(255,33,86,0.4)]">
+                    View My Work
+                </a>
+                <!-- 30% Structural Secondary CTA -->
+                <a href="#contact" class="w-full sm:w-auto px-8 py-4 glass hover:bg-sv-border text-white rounded-full font-bold transition-all">
+                    Contact Me
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 px-6 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="reveal-up">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6">Bridging the gap between <span class="text-sv-cyan">Design</span> and <span class="text-sv-accent">Code</span>.</h2>
+                    <p class="text-slate-400 text-lg leading-relaxed mb-6">
+                        I specialize in creating immersive digital experiences. By applying strict visual hierarchies, I don't just create pretty pictures—I build functional, fast, and highly-focused websites tailored to your business goals.
+                    </p>
+                    <p class="text-slate-400 text-lg leading-relaxed">
+                        Whether you are a hotel looking to increase direct bookings, or a gym wanting to boost memberships, I craft landing pages engineered to stand out and convert.
+                    </p>
+                </div>
+                
+                <!-- 30% Structural Support Card -->
+                <div class="reveal-up glass p-8 rounded-3xl border border-sv-border">
+                    <h3 class="text-xl font-bold mb-6 text-white flex items-center gap-2">
+                        <svg class="w-5 h-5 text-sv-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        My Arsenal
+                    </h3>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-4 py-2 bg-sv-surface rounded-lg text-sm font-semibold border border-sv-border text-slate-200">UI/UX Design</span>
+                        <span class="px-4 py-2 bg-sv-surface rounded-lg text-sm font-semibold border border-sv-border text-slate-200">Landing Page Design</span>
+                        <span class="px-4 py-2 bg-sv-surface rounded-lg text-sm font-semibold border border-sv-border text-slate-200">Figma</span>
+                        <span class="px-4 py-2 bg-sv-surface rounded-lg text-sm font-semibold border border-sv-border text-slate-200">HTML5</span>
+                        <span class="px-4 py-2 bg-sv-surface rounded-lg text-sm font-semibold border border-sv-border text-slate-200">CSS3 / Tailwind</span>
+                        <span class="px-4 py-2 bg-sv-surface rounded-lg text-sm font-semibold border border-sv-border text-slate-200">JavaScript</span>
+                        <span class="px-4 py-2 bg-sv-surface rounded-lg text-sm font-semibold border border-sv-border text-slate-200">GSAP Animations</span>
+                        <span class="px-4 py-2 bg-sv-surface rounded-lg text-sm font-semibold border border-sv-border text-slate-200">Conversion Focus</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio / Projects Section -->
+    <section id="portfolio" class="py-24 px-6 relative bg-[#0D0B1A]">
+        <!-- 60% Dominant Base variation to separate sections slightly -->
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16 reveal-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Selected <span class="text-sv-cyan">Works</span></h2>
+                <p class="text-slate-400 text-lg max-w-2xl">A showcase of high-converting landing pages built for various industries, utilizing strong visual focus.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                
+                <!-- Project 1: Hotel -->
+                <div class="project-card reveal-up group glass p-3 rounded-3xl cursor-pointer">
+                    <div class="project-img-wrapper rounded-2xl overflow-hidden mb-6 aspect-[4/3] bg-sv-surface relative border border-sv-border">
+                        <!-- Uploaded hotel screenshot -->
+                        <img src="Screenshot 2026-03-15 175216.png" alt="LJ Modern Backpackers" class="w-full h-full object-cover object-top">
+                        <!-- 10% Accent Overlay on Hover -->
+                        <div class="absolute inset-0 bg-sv-base/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                            <a href="#" class="px-8 py-3 bg-sv-accent text-white font-bold rounded-full transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">View Live Site</a>
+                        </div>
+                    </div>
+                    <div class="px-3 pb-3">
+                        <p class="text-sv-cyan text-xs font-bold mb-2 uppercase tracking-widest">Hotel & Lodge</p>
+                        <h3 class="text-2xl font-bold mb-2 text-white group-hover:text-sv-accent transition-colors">LJ Modern Backpackers</h3>
+                        <p class="text-slate-400 text-sm">A sophisticated landing page designed to redefine hostel culture and drive direct bookings with maximum clarity.</p>
+                    </div>
+                </div>
+
+                <!-- Project 2: Gym -->
+                <div class="project-card reveal-up group glass p-3 rounded-3xl cursor-pointer md:mt-16">
+                    <div class="project-img-wrapper rounded-2xl overflow-hidden mb-6 aspect-[4/3] bg-sv-surface relative border border-sv-border">
+                        <!-- Uploaded gym screenshot -->
+                        <img src="Screenshot 2026-03-15 175256.png" alt="AV Fitness Kenya" class="w-full h-full object-cover object-top">
+                        <div class="absolute inset-0 bg-sv-base/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                            <a href="#" class="px-8 py-3 bg-sv-cyan text-sv-base font-bold rounded-full transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">View Live Site</a>
+                        </div>
+                    </div>
+                    <div class="px-3 pb-3">
+                        <p class="text-sv-accent text-xs font-bold mb-2 uppercase tracking-widest">Fitness & Gym</p>
+                        <h3 class="text-2xl font-bold mb-2 text-white group-hover:text-sv-cyan transition-colors">AV Fitness Kenya</h3>
+                        <p class="text-slate-400 text-sm">A high-energy, dark-themed landing page focusing on pushing limits, showcasing facilities, and converting visitors into members.</p>
+                    </div>
+                </div>
+
+                <!-- Project 3: Business -->
+                <div class="project-card reveal-up group glass p-3 rounded-3xl cursor-pointer">
+                    <div class="project-img-wrapper rounded-2xl overflow-hidden mb-6 aspect-[4/3] bg-sv-surface relative border border-sv-border">
+                        <!-- Uploaded gym/community screenshot -->
+                        <img src="Screenshot 2026-03-15 175355.png" alt="Buchi Gym" class="w-full h-full object-cover object-top">
+                        <div class="absolute inset-0 bg-sv-base/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                            <a href="#" class="px-8 py-3 bg-sv-accent text-white font-bold rounded-full transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">View Live Site</a>
+                        </div>
+                    </div>
+                    <div class="px-3 pb-3">
+                        <p class="text-sv-cyan text-xs font-bold mb-2 uppercase tracking-widest">Business Landing Page</p>
+                        <h3 class="text-2xl font-bold mb-2 text-white group-hover:text-sv-accent transition-colors">Buchi Gym Community</h3>
+                        <p class="text-slate-400 text-sm">A modern business landing page emphasizing community building, expert training, and high-impact UI/UX.</p>
+                    </div>
+                </div>
+
+                <!-- Optional: View More Card -->
+                <div class="project-card reveal-up flex items-center justify-center md:mt-16 border-2 border-dashed border-sv-border rounded-3xl aspect-[4/3] hover:border-sv-accent transition-colors group cursor-pointer bg-sv-surface/30">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-sv-surface border border-sv-border rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-sv-accent group-hover:border-sv-accent transition-colors shadow-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white group-hover:text-sv-accent transition-colors">View More Work</h3>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Design Process (Structural Support Focus) -->
+    <section id="process" class="py-24 px-6 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal-up">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">How I <span class="text-sv-accent">Work</span></h2>
+                <p class="text-slate-400 text-lg">A structured framework to prevent visual chaos and deliver results.</p>
+            </div>
+
+            <div class="relative mt-20">
+                <!-- 30% Structural Connecting Line -->
+                <div class="hidden lg:block absolute top-12 left-0 w-full h-0.5 bg-gradient-to-r from-sv-base via-sv-border to-sv-base z-0"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="reveal-up text-center lg:text-left group">
+                        <div class="w-24 h-24 mx-auto lg:mx-0 bg-sv-surface border-2 border-sv-border rounded-full flex items-center justify-center text-3xl font-black text-slate-500 mb-6 group-hover:border-sv-cyan group-hover:text-sv-cyan group-hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all glass">01</div>
+                        <h4 class="text-xl font-bold mb-2 text-white">Research</h4>
+                        <p class="text-slate-400 text-sm">Understanding your dimensions, audience, and goals.</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="reveal-up text-center lg:text-left group" style="transition-delay: 100ms;">
+                        <div class="w-24 h-24 mx-auto lg:mx-0 bg-sv-surface border-2 border-sv-border rounded-full flex items-center justify-center text-3xl font-black text-slate-500 mb-6 group-hover:border-sv-accent group-hover:text-sv-accent group-hover:shadow-[0_0_20px_rgba(255,33,86,0.3)] transition-all glass">02</div>
+                        <h4 class="text-xl font-bold mb-2 text-white">Wireframe</h4>
+                        <p class="text-slate-400 text-sm">Mapping the structural 30% support for maximum conversion.</p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="reveal-up text-center lg:text-left group" style="transition-delay: 200ms;">
+                        <div class="w-24 h-24 mx-auto lg:mx-0 bg-sv-surface border-2 border-sv-border rounded-full flex items-center justify-center text-3xl font-black text-slate-500 mb-6 group-hover:border-sv-cyan group-hover:text-sv-cyan group-hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all glass">03</div>
+                        <h4 class="text-xl font-bold mb-2 text-white">UI Design</h4>
+                        <p class="text-slate-400 text-sm">Applying the 60:30:10 rule, typography, and aesthetics in Figma.</p>
+                    </div>
+                    <!-- Step 4 -->
+                    <div class="reveal-up text-center lg:text-left group" style="transition-delay: 300ms;">
+                        <div class="w-24 h-24 mx-auto lg:mx-0 bg-sv-surface border-2 border-sv-border rounded-full flex items-center justify-center text-3xl font-black text-slate-500 mb-6 group-hover:border-sv-accent group-hover:text-sv-accent group-hover:shadow-[0_0_20px_rgba(255,33,86,0.3)] transition-all glass">04</div>
+                        <h4 class="text-xl font-bold mb-2 text-white">Development</h4>
+                        <p class="text-slate-400 text-sm">Writing clean code with dynamic GSAP interactions.</p>
+                    </div>
+                    <!-- Step 5 -->
+                    <div class="reveal-up text-center lg:text-left group" style="transition-delay: 400ms;">
+                        <div class="w-24 h-24 mx-auto lg:mx-0 bg-sv-surface border-2 border-sv-border rounded-full flex items-center justify-center text-3xl font-black text-slate-500 mb-6 group-hover:border-sv-cyan group-hover:text-sv-cyan group-hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] transition-all glass">05</div>
+                        <h4 class="text-xl font-bold mb-2 text-white">Final Site</h4>
+                        <p class="text-slate-400 text-sm">Testing, optimization, and launching your digital asset.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-24 px-6 bg-[#0D0B1A]">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-bold mb-16 text-center reveal-up">Client <span class="text-sv-cyan">Feedback</span></h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Testimonial 1 -->
+                <div class="glass p-8 rounded-3xl border border-sv-border reveal-up relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-sv-accent transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                    <div class="flex text-sv-accent mb-6">
+                        <!-- 5 Stars -->
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    </div>
+                    <p class="text-slate-300 italic mb-6 leading-relaxed">"Incredible eye for visual hierarchy. The landing page built for our hotel cut through the noise and drastically improved our direct bookings."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-sv-surface border border-sv-border rounded-full flex items-center justify-center text-sv-cyan font-bold">LJ</div>
+                        <div>
+                            <h5 class="text-sm font-bold text-white">LJ Management</h5>
+                            <p class="text-xs text-sv-cyan">Hospitality Client</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="glass p-8 rounded-3xl border border-sv-border reveal-up relative overflow-hidden group" style="transition-delay: 100ms;">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-sv-cyan transform -translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                    <div class="flex text-sv-cyan mb-6">
+                        <!-- 5 Stars -->
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    </div>
+                    <p class="text-slate-300 italic mb-6 leading-relaxed">"Fast, responsive, and pops off the screen. Captures the exact high-energy vibe of our gym while driving real membership signups."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-sv-surface border border-sv-border rounded-full flex items-center justify-center text-sv-accent font-bold">AV</div>
+                        <div>
+                            <h5 class="text-sm font-bold text-white">Fitness Director</h5>
+                            <p class="text-xs text-sv-accent">Gym & Fitness Client</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section (10% Focus Heavy) -->
+    <section id="contact" class="py-32 px-6 relative overflow-hidden">
+        <!-- Intense Background Glow -->
+        <div class="absolute w-[800px] h-[800px] bg-sv-accent/10 rounded-full blur-[150px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto text-center relative z-10 reveal-up">
+            <h2 class="text-5xl md:text-7xl font-bold tracking-tight mb-8">Ready to jump into the <br><span class="text-gradient">next dimension?</span></h2>
+            <p class="text-xl text-slate-400 mb-12 max-w-2xl mx-auto">Let's apply high-contrast focus to your business. Reach out and let's build a landing page that converts.</p>
+            
+            <div class="flex justify-center items-center">
+                <!-- Primary 10% Call to Action -->
+                <a href="mailto:dzungtech26@gmail.com" class="px-10 py-5 bg-sv-accent hover:bg-[#E01748] text-white rounded-full font-extrabold text-lg transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(255,33,86,0.5)] flex items-center gap-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Start a Project
+                </a>
+            </div>
+
+            <div class="mt-16 flex items-center justify-center gap-8 text-slate-500 font-bold tracking-wider uppercase text-sm">
+                <a href="mailto:dzungtech26@gmail.com" class="hover:text-sv-cyan transition-colors">Email</a>
+                <span class="text-sv-border">/</span>
+                <a href="https://www.instagram.com/mr.dzung_designer/" class="hover:text-sv-accent transition-colors">Instagram</a>
+                <span class="text-sv-border">/</span>
+                <a href="#" class="hover:text-sv-cyan transition-colors">LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-sv-border bg-sv-base text-center text-slate-500 text-sm font-medium">
+        <p>© 2026 Dzung.Tech Engineered for conversion.</p>
+    </footer>
+
+    <!-- Scripts for Animations -->
+    <script>
+        // Register ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Navbar structural blur effect on scroll
+        const navbar = document.getElementById('navbar');
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('glass', 'shadow-[0_4px_30px_rgba(0,0,0,0.5)]');
+                navbar.classList.remove('py-5');
+                navbar.classList.add('py-3');
+            } else {
+                navbar.classList.remove('glass', 'shadow-[0_4px_30px_rgba(0,0,0,0.5)]');
+                navbar.classList.add('py-5');
+                navbar.classList.remove('py-3');
+            }
+        });
+
+        // Mobile menu toggle (improves mobile navigation visibility)
+        const closeMobileMenu = () => mobileMenu?.classList.add('hidden');
+        const toggleMobileMenu = () => mobileMenu?.classList.toggle('hidden');
+
+        menuToggle?.addEventListener('click', toggleMobileMenu);
+        mobileMenu?.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // Initialize animations after DOM loads
+        document.addEventListener("DOMContentLoaded", (event) => {
+            // Hero Section Animation (Snappy Spider-Verse feel)
+            gsap.to(".hero-elem", {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: "back.out(1.2)", // Gives a slight comic-book bounce
+                delay: 0.2
+            });
+
+            // Scroll Reveal Animations
+            const revealElements = document.querySelectorAll('.reveal-up');
+            
+            revealElements.forEach((elem) => {
+                gsap.to(elem, {
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power3.out"
+                });
+            });
+        });
+    </script>
+</body>
+</html>
