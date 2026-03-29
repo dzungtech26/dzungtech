@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derick Derton Mushi — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:        #0b1a2e;
+    --navy-mid:    #122040;
+    --navy-light:  #1a2f58;
+    --gold:        #c8a84b;
+    --gold-light:  #e8cc84;
+    --cream:       #f4efe4;
+    --white:       #ffffff;
+    --muted:       #7a8fa6;
+    --border:      rgba(200,168,75,0.18);
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body:    'Outfit', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--navy);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ─────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 60px;
+    background: rgba(11,26,46,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: padding .3s;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ── HERO ────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 80% 40%, rgba(26,47,88,0.6) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 10% 80%, rgba(200,168,75,0.06) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(200,168,75,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,168,75,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 760px; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 12px; font-weight: 500; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp .7s .1s forwards;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block;
+    width: 32px; height: 1px; background: var(--gold);
+  }
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 1.0;
+    color: var(--white);
+    letter-spacing: -.01em;
+    margin-bottom: 8px;
+    opacity: 0; animation: fadeUp .7s .25s forwards;
+  }
+  .hero-name em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-tagline {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: .08em;
+    margin-bottom: 40px;
+    opacity: 0; animation: fadeUp .7s .4s forwards;
+  }
+  .hero-pills {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 48px;
+    opacity: 0; animation: fadeUp .7s .55s forwards;
+  }
+  .pill {
+    padding: 8px 20px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 400;
+    letter-spacing: .08em;
+    color: var(--cream);
+    background: rgba(200,168,75,0.06);
+    transition: all .2s;
+  }
+  .pill:hover { background: rgba(200,168,75,0.14); border-color: rgba(200,168,75,0.4); }
+  .hero-cta {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp .7s .7s forwards;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: var(--font-body);
+    font-size: 13px; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all .2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px;
+    border: 1px solid var(--border);
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-size: 13px; font-weight: 400;
+    letter-spacing: .08em; text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: all .2s;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  /* avatar floating */
+  .hero-avatar {
+    position: absolute; right: 60px; top: 50%;
+    transform: translateY(-50%);
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--navy-mid);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    opacity: 0; animation: fadeIn .9s .4s forwards;
+  }
+  .hero-avatar::before {
+    content: '';
+    position: absolute; inset: -16px;
+    border-radius: 50%;
+    border: 1px dashed rgba(200,168,75,0.2);
+    animation: spin 18s linear infinite;
+  }
+  .avatar-initials {
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: .05em;
+    line-height: 1;
+  }
+  .avatar-label {
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* ── SECTION SHARED ──────────────────── */
+  section {
+    padding: 100px 60px;
+    position: relative;
+  }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 11px; font-weight: 500; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .section-label::before {
+    content: ''; display: block;
+    width: 24px; height: 1px; background: var(--gold);
+  }
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+  .section-heading em { font-style: italic; color: var(--gold); }
+  .divider {
+    width: 60px; height: 1px;
+    background: var(--gold);
+    margin-bottom: 48px;
+    opacity: .5;
+  }
+
+  /* ── ABOUT ───────────────────────────── */
+  #about { background: var(--navy-mid); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about-text p {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: rgba(244,239,228,0.8);
+    margin-bottom: 20px;
+  }
+  .about-text p strong { color: var(--cream); font-weight: 500; }
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .stat-box {
+    background: var(--navy);
+    padding: 28px 24px;
+    border: 1px solid var(--border);
+    transition: border-color .2s;
+  }
+  .stat-box:hover { border-color: rgba(200,168,75,0.4); }
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-desc {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: .06em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ── SERVICES ────────────────────────── */
+  #services { background: var(--navy); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .service-card {
+    background: var(--navy);
+    padding: 40px 36px;
+    transition: background .2s;
+    cursor: default;
+  }
+  .service-card:hover { background: var(--navy-mid); }
+  .service-icon {
+    width: 44px; height: 44px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    font-size: 20px;
+  }
+  .service-title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+  .service-desc {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+  .service-tags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 20px;
+  }
+  .tag {
+    font-size: 11px;
+    letter-spacing: .06em;
+    color: var(--gold);
+    padding: 4px 10px;
+    border: 1px solid rgba(200,168,75,0.2);
+    border-radius: 2px;
+  }
+
+  /* ── PROJECTS ────────────────────────── */
+  #projects { background: var(--navy-mid); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .project-card {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+    transition: all .25s;
+    text-decoration: none;
+    display: block;
+  }
+  .project-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s;
+  }
+  .project-card:hover { transform: translateY(-4px); border-color: rgba(200,168,75,0.3); }
+  .project-card:hover::after { transform: scaleX(1); }
+  .project-card.featured {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .project-badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(200,168,75,0.1);
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .project-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .project-desc {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .project-stack {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .project-stack span {
+    font-size: 11px;
+    color: var(--muted);
+    background: rgba(255,255,255,0.04);
+    padding: 4px 10px;
+    border-radius: 2px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .project-preview {
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #0a1628;
+  }
+  .project-preview svg { display: block; width: 100%; height: auto; }
+  .project-arrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 20px;
+    transition: gap .2s;
+  }
+  .project-card:hover .project-arrow { gap: 12px; }
+
+  /* ── CONTACT ─────────────────────────── */
+  #contact { background: var(--navy); }
+  .contact-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .contact-inner .section-label { justify-content: center; }
+  .contact-inner .section-heading { text-align: center; }
+  .contact-inner .divider { margin: 0 auto 48px; }
+  .contact-inner p {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+  .contact-links {
+    display: flex; flex-direction: column; gap: 1px;
+    text-align: left;
+    margin-bottom: 40px;
+  }
+  .contact-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 24px;
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    font-size: 14px;
+    transition: background .2s;
+  }
+  .contact-row:hover { background: var(--navy-light); }
+  .contact-row .label { color: var(--muted); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+  .contact-row .value { color: var(--cream); font-weight: 400; }
+
+  /* ── FOOTER ──────────────────────────── */
+  footer {
+    padding: 28px 60px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer p { font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+  .footer-mark {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--gold);
+    letter-spacing: .12em;
+  }
+
+  /* ── ANIMATIONS ──────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity .65s ease, transform .65s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ──────────────────────── */
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    section { padding: 72px 24px; }
+    .hero { padding: 100px 24px 60px; flex-direction: column; text-align: center; }
+    .hero-eyebrow { justify-content: center; }
+    .hero-pills { justify-content: center; }
+    .hero-cta { justify-content: center; }
+    .hero-avatar { position: static; transform: none; margin: 48px auto 0; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">DzungTech</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Available for projects</div>
+    <h1 class="hero-name">Derick Derton<br><em>Mushi</em></h1>
+    <p class="hero-tagline">Web Designer &nbsp;·&nbsp; Day Trader &nbsp;·&nbsp; Graphic Designer &nbsp;·&nbsp; Dar es Salaam</p>
+    <div class="hero-pills">
+      <span class="pill">HTML / CSS / JS</span>
+      <span class="pill">Landing Pages</span>
+      <span class="pill">Forex &amp; Crypto</span>
+      <span class="pill">Brand Design</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View My Work →</a>
+      <a href="#contact" class="btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-avatar">
+    <div class="avatar-initials">Dzung|Tech</div>
+    <div class="avatar-label">Portfolio 2025</div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="section-label">About me</div>
+      <h2 class="section-heading">Building things<br><em>that matter</em></h2>
+      <div class="divider"></div>
+      <p>I'm <strong>Derick Derton Mushi</strong>, a multidisciplinary creative based in Dar es Salaam. I design and build websites that are clean, fast, and purposeful — from landing pages to full web platforms.</p>
+      <p>Currently studying <strong>Accounting & Finance</strong> at the College of Business Education while actively trading forex and crypto markets. I bring both creative instinct and analytical precision to everything I build.</p>
+      <p>Outside the screen, I work as a <strong>graphic designer</strong> and I'm co-building <strong>LianTrade Academy</strong> — a trading education platform — alongside <strong>Nexus of Hope</strong>, a charity platform dedicated to creating real community impact.</p>
+    </div>
+    <div class="about-stats reveal">
+      <div class="stat-box">
+        <div class="stat-number">3+</div>
+        <div class="stat-desc">Web projects active</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">2+</div>
+        <div class="stat-desc">Years in trading</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">4</div>
+        <div class="stat-desc">Roles, one vision</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">∞</div>
+        <div class="stat-desc">Drive to build</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div style="text-align:center; max-width:560px; margin:0 auto 56px;" class="reveal">
+    <div class="section-label" style="justify-content:center">What I do</div>
+    <h2 class="section-heading">Services &amp;<br><em>Expertise</em></h2>
+    <div class="divider" style="margin:0 auto"></div>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-icon">⬡</div>
+      <div class="service-title">Web Design &amp; Development</div>
+      <div class="service-desc">Custom landing pages and websites built from scratch using clean HTML, CSS, and JavaScript. Fast, responsive, and conversion-focused.</div>
+      <div class="service-tags">
+        <span class="tag">HTML/CSS</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Responsive</span>
+        <span class="tag">Landing Pages</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">◈</div>
+      <div class="service-title">Trading &amp; Market Analysis</div>
+      <div class="service-desc">Experienced forex and crypto day trader. Through LianTrade Academy, I share strategies, market insights and education for aspiring traders.</div>
+      <div class="service-tags">
+        <span class="tag">Forex</span>
+        <span class="tag">Crypto</span>
+        <span class="tag">Analysis</span>
+        <span class="tag">Education</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">◻</div>
+      <div class="service-title">Graphic Design</div>
+      <div class="service-desc">Brand visuals, social media graphics, and digital design work. Creating polished, professional visuals that communicate clearly and look great.</div>
+      <div class="service-tags">
+        <span class="tag">Branding</span>
+        <span class="tag">Visuals</span>
+        <span class="tag">Digital</span>
+        <span class="tag">Print-ready</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal" style="margin-bottom:48px">
+    <div class="section-label">My work</div>
+    <h2 class="section-heading">Selected<br><em>Projects</em></h2>
+    <div class="divider"></div>
+  </div>
+  <div class="projects-grid">
+
+    <!-- LianTrade Academy — featured -->
+    <div class="project-card featured reveal">
+      <div>
+        <span class="project-badge">In Progress · Team Project</span>
+        <h3 class="project-title">LianTrade Academy</h3>
+        <p class="project-desc">A full trading education platform for forex and crypto traders. Built with my team to share market strategies, analysis tools, and a community for serious traders across East Africa.</p>
+        <div class="project-stack">
+          <span>HTML/CSS/JS</span>
+          <span>Web Design</span>
+          <span>Trading</span>
+          <span>Education</span>
+        </div>
+        <div class="project-arrow">View Project →</div>
+      </div>
+      <!-- LianTrade mockup -->
+      <div class="project-preview">
+        <svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+          <!-- bg -->
+          <rect width="400" height="260" fill="#080f1c"/>
+          <!-- nav bar -->
+          <rect width="400" height="36" fill="#0d1a30"/>
+          <rect x="14" y="11" width="28" height="14" rx="2" fill="#c8a84b" opacity=".9"/>
+          <text x="14" y="21" font-family="sans-serif" font-size="8" font-weight="700" fill="#c8a84b">LTA</text>
+          <rect x="54" y="14" width="28" height="8" rx="2" fill="#1e2e48"/>
+          <rect x="88" y="14" width="32" height="8" rx="2" fill="#1e2e48"/>
+          <rect x="126" y="14" width="28" height="8" rx="2" fill="#1e2e48"/>
+          <rect x="350" y="11" width="36" height="14" rx="7" fill="#c8a84b" opacity=".85"/>
+          <text x="357" y="21" font-family="sans-serif" font-size="7" fill="#0d1a30" font-weight="700">Join</text>
+          <!-- hero area -->
+          <rect x="14" y="46" width="160" height="10" rx="2" fill="#ffffff" opacity=".9"/>
+          <rect x="14" y="62" width="120" height="7" rx="2" fill="#c8a84b" opacity=".7"/>
+          <rect x="14" y="76" width="180" height="5" rx="2" fill="#2a3e5a"/>
+          <rect x="14" y="85" width="150" height="5" rx="2" fill="#2a3e5a"/>
+          <rect x="14" y="100" width="64" height="20" rx="3" fill="#c8a84b"/>
+          <text x="22" y="113" font-family="sans-serif" font-size="7" fill="#080f1c" font-weight="700">Start Learning</text>
+          <rect x="84" y="100" width="56" height="20" rx="3" fill="none" stroke="#c8a84b" stroke-width="1"/>
+          <text x="92" y="113" font-family="sans-serif" font-size="7" fill="#c8a84b">Our Courses</text>
+          <!-- chart panel -->
+          <rect x="210" y="44" width="178" height="110" rx="6" fill="#0d1a30" stroke="#1e2e48" stroke-width="1"/>
+          <text x="220" y="58" font-family="sans-serif" font-size="7" fill="#7a8fa6">EUR/USD · 1H</text>
+          <text x="340" y="58" font-family="sans-serif" font-size="7" fill="#4caf82">+0.42%</text>
+          <!-- candlestick chart -->
+          <g opacity=".9">
+            <line x1="228" y1="80" x2="228" y2="105" stroke="#e05252" stroke-width="1"/>
+            <rect x="225" y="85" width="6" height="14" fill="#e05252"/>
+            <line x1="242" y1="75" x2="242" y2="100" stroke="#e05252" stroke-width="1"/>
+            <rect x="239" y="82" width="6" height="12" fill="#e05252"/>
+            <line x1="256" y1="72" x2="256" y2="96" stroke="#4caf82" stroke-width="1"/>
+            <rect x="253" y="78" width="6" height="10" fill="#4caf82"/>
+            <line x1="270" y1="68" x2="270" y2="90" stroke="#4caf82" stroke-width="1"/>
+            <rect x="267" y="72" width="6" height="10" fill="#4caf82"/>
+            <line x1="284" y1="64" x2="284" y2="88" stroke="#4caf82" stroke-width="1"/>
+            <rect x="281" y="70" width="6" height="9" fill="#4caf82"/>
+            <line x1="298" y1="70" x2="298" y2="93" stroke="#e05252" stroke-width="1"/>
+            <rect x="295" y="76" width="6" height="11" fill="#e05252"/>
+            <line x1="312" y1="65" x2="312" y2="86" stroke="#4caf82" stroke-width="1"/>
+            <rect x="309" y="70" width="6" height="9" fill="#4caf82"/>
+            <line x1="326" y1="60" x2="326" y2="82" stroke="#4caf82" stroke-width="1"/>
+            <rect x="323" y="65" width="6" height="9" fill="#4caf82"/>
+            <line x1="340" y1="62" x2="340" y2="84" stroke="#e05252" stroke-width="1"/>
+            <rect x="337" y="68" width="6" height="10" fill="#e05252"/>
+            <line x1="354" y1="56" x2="354" y2="78" stroke="#4caf82" stroke-width="1"/>
+            <rect x="351" y="62" width="6" height="8" fill="#4caf82"/>
+            <line x1="368" y1="54" x2="368" y2="76" stroke="#4caf82" stroke-width="1"/>
+            <rect x="365" y="59" width="6" height="8" fill="#4caf82"/>
+          </g>
+          <!-- volume bars -->
+          <rect x="225" y="122" width="6" height="14" fill="#e05252" opacity=".4"/>
+          <rect x="239" y="125" width="6" height="11" fill="#e05252" opacity=".4"/>
+          <rect x="253" y="120" width="6" height="16" fill="#4caf82" opacity=".4"/>
+          <rect x="267" y="123" width="6" height="13" fill="#4caf82" opacity=".4"/>
+          <rect x="281" y="118" width="6" height="18" fill="#4caf82" opacity=".4"/>
+          <rect x="295" y="124" width="6" height="12" fill="#e05252" opacity=".4"/>
+          <rect x="309" y="119" width="6" height="17" fill="#4caf82" opacity=".4"/>
+          <rect x="323" y="121" width="6" height="15" fill="#4caf82" opacity=".4"/>
+          <rect x="337" y="123" width="6" height="13" fill="#e05252" opacity=".4"/>
+          <rect x="351" y="117" width="6" height="19" fill="#4caf82" opacity=".4"/>
+          <rect x="365" y="119" width="6" height="17" fill="#4caf82" opacity=".4"/>
+          <!-- course cards row -->
+          <rect x="14" y="132" width="183" height="4" rx="2" fill="#1a2a44"/>
+          <rect x="14" y="143" width="56" height="72" rx="4" fill="#0d1a30" stroke="#1e2e48" stroke-width="1"/>
+          <rect x="16" y="145" width="52" height="28" rx="2" fill="#152238"/>
+          <text x="42" y="162" font-family="sans-serif" font-size="14" fill="#c8a84b" text-anchor="middle" opacity=".6">📈</text>
+          <rect x="18" y="179" width="38" height="5" rx="1" fill="#2a3e5a"/>
+          <rect x="18" y="188" width="28" height="4" rx="1" fill="#1e2e48"/>
+          <rect x="76" y="143" width="56" height="72" rx="4" fill="#0d1a30" stroke="#1e2e48" stroke-width="1"/>
+          <rect x="78" y="145" width="52" height="28" rx="2" fill="#152238"/>
+          <text x="104" y="162" font-family="sans-serif" font-size="14" fill="#c8a84b" text-anchor="middle" opacity=".6">₿</text>
+          <rect x="80" y="179" width="38" height="5" rx="1" fill="#2a3e5a"/>
+          <rect x="80" y="188" width="28" height="4" rx="1" fill="#1e2e48"/>
+          <rect x="138" y="143" width="56" height="72" rx="4" fill="#0d1a30" stroke="#c8a84b" stroke-width="1"/>
+          <rect x="140" y="145" width="52" height="28" rx="2" fill="#1c2e18"/>
+          <text x="166" y="162" font-family="sans-serif" font-size="14" fill="#4caf82" text-anchor="middle" opacity=".8">✦</text>
+          <rect x="142" y="179" width="38" height="5" rx="1" fill="#2a3e5a"/>
+          <text x="142" y="208" font-family="sans-serif" font-size="6" fill="#c8a84b">Featured</text>
+          <!-- stats bar -->
+          <rect x="210" y="162" width="178" height="54" rx="4" fill="#0d1a30" stroke="#1e2e48" stroke-width="1"/>
+          <text x="222" y="178" font-family="sans-serif" font-size="6" fill="#7a8fa6">Students</text>
+          <text x="222" y="188" font-family="sans-serif" font-size="9" font-weight="700" fill="#ffffff">1,240+</text>
+          <line x1="272" y1="168" x2="272" y2="210" stroke="#1e2e48" stroke-width="1"/>
+          <text x="282" y="178" font-family="sans-serif" font-size="6" fill="#7a8fa6">Win Rate</text>
+          <text x="282" y="188" font-family="sans-serif" font-size="9" font-weight="700" fill="#4caf82">68.4%</text>
+          <line x1="332" y1="168" x2="332" y2="210" stroke="#1e2e48" stroke-width="1"/>
+          <text x="342" y="178" font-family="sans-serif" font-size="6" fill="#7a8fa6">Courses</text>
+          <text x="342" y="188" font-family="sans-serif" font-size="9" font-weight="700" fill="#c8a84b">12</text>
+          <!-- footer strip -->
+          <rect x="210" y="222" width="178" height="24" rx="4" fill="#c8a84b" opacity=".9"/>
+          <text x="250" y="237" font-family="sans-serif" font-size="7" font-weight="700" fill="#080f1c">Start Trading Smarter →</text>
+          <!-- bottom nav hint -->
+          <rect y="240" width="400" height="20" fill="#080f1c" opacity=".8"/>
+          <text x="14" y="253" font-family="sans-serif" font-size="6" fill="#2a3e5a">Home</text>
+          <text x="56" y="253" font-family="sans-serif" font-size="6" fill="#2a3e5a">Courses</text>
+          <text x="104" y="253" font-family="sans-serif" font-size="6" fill="#2a3e5a">Signals</text>
+          <text x="148" y="253" font-family="sans-serif" font-size="6" fill="#c8a84b">Community</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Nexus of Hope -->
+    <div class="project-card reveal">
+      <span class="project-badge">In Progress · Charity</span>
+      <h3 class="project-title">Nexus of Hope</h3>
+      <!-- mockup -->
+      <div class="project-preview" style="margin-bottom:16px">
+        <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- bg -->
+          <rect width="400" height="220" fill="#f7f4ee"/>
+          <!-- nav -->
+          <rect width="400" height="34" fill="#ffffff"/>
+          <rect x="14" y="10" width="10" height="14" rx="1" fill="#1a5c3a"/>
+          <rect x="28" y="10" width="10" height="14" rx="1" fill="#e8a020"/>
+          <rect x="14" y="10" width="48" height="14" rx="2" fill="none"/>
+          <text x="14" y="22" font-family="sans-serif" font-size="8" font-weight="700" fill="#1a5c3a">NEXUS</text>
+          <text x="60" y="22" font-family="sans-serif" font-size="8" fill="#888">of Hope</text>
+          <rect x="300" y="12" width="40" height="12" rx="6" fill="#e8a020"/>
+          <text x="308" y="21" font-family="sans-serif" font-size="6.5" font-weight="700" fill="#fff">Donate</text>
+          <rect x="252" y="14" width="28" height="8" rx="2" fill="#eee"/>
+          <rect x="286" y="14" width="8" height="8" rx="2" fill="#eee"/>
+          <!-- hero section -->
+          <rect x="0" y="34" width="400" height="100" fill="#1a5c3a"/>
+          <!-- dot grid -->
+          <circle cx="30" cy="55" r="1.5" fill="#ffffff" opacity=".15"/>
+          <circle cx="60" cy="55" r="1.5" fill="#ffffff" opacity=".15"/>
+          <circle cx="90" cy="55" r="1.5" fill="#ffffff" opacity=".15"/>
+          <circle cx="30" cy="80" r="1.5" fill="#ffffff" opacity=".15"/>
+          <circle cx="60" cy="80" r="1.5" fill="#ffffff" opacity=".15"/>
+          <circle cx="30" cy="105" r="1.5" fill="#ffffff" opacity=".15"/>
+          <text x="110" y="62" font-family="sans-serif" font-size="6" fill="#a8d8b8" letter-spacing="3">TOGETHER WE RISE</text>
+          <rect x="110" y="68" width="140" height="10" rx="2" fill="#ffffff" opacity=".95"/>
+          <rect x="110" y="82" width="110" height="10" rx="2" fill="#e8a020" opacity=".9"/>
+          <rect x="110" y="96" width="160" height="5" rx="2" fill="#ffffff" opacity=".3"/>
+          <rect x="110" y="105" width="130" height="5" rx="2" fill="#ffffff" opacity=".25"/>
+          <!-- image placeholder right side -->
+          <rect x="300" y="38" width="90" height="90" rx="4" fill="#14472e"/>
+          <circle cx="345" cy="75" r="22" fill="#1f6644"/>
+          <text x="345" y="80" font-family="sans-serif" font-size="18" text-anchor="middle" fill="#e8a020" opacity=".6">❤</text>
+          <!-- impact stats strip -->
+          <rect x="0" y="134" width="400" height="40" fill="#ffffff"/>
+          <rect x="0" y="133" width="400" height="1" fill="#eee"/>
+          <text x="40" y="149" font-family="sans-serif" font-size="9" font-weight="700" fill="#1a5c3a" text-anchor="middle">500+</text>
+          <text x="40" y="160" font-family="sans-serif" font-size="6" fill="#888" text-anchor="middle">Families helped</text>
+          <line x1="110" y1="139" x2="110" y2="169" stroke="#eee" stroke-width="1"/>
+          <text x="155" y="149" font-family="sans-serif" font-size="9" font-weight="700" fill="#1a5c3a" text-anchor="middle">12</text>
+          <text x="155" y="160" font-family="sans-serif" font-size="6" fill="#888" text-anchor="middle">Communities</text>
+          <line x1="220" y1="139" x2="220" y2="169" stroke="#eee" stroke-width="1"/>
+          <text x="265" y="149" font-family="sans-serif" font-size="9" font-weight="700" fill="#1a5c3a" text-anchor="middle">TZS 4M+</text>
+          <text x="265" y="160" font-family="sans-serif" font-size="6" fill="#888" text-anchor="middle">Funds raised</text>
+          <line x1="330" y1="139" x2="330" y2="169" stroke="#eee" stroke-width="1"/>
+          <text x="365" y="149" font-family="sans-serif" font-size="9" font-weight="700" fill="#e8a020" text-anchor="middle">3 yrs</text>
+          <text x="365" y="160" font-family="sans-serif" font-size="6" fill="#888" text-anchor="middle">Of impact</text>
+          <!-- mission cards -->
+          <rect x="14" y="180" width="112" height="34" rx="4" fill="#f0faf4" stroke="#d4ead9" stroke-width="1"/>
+          <text x="70" y="197" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#1a5c3a">🎓</text>
+          <text x="70" y="208" font-family="sans-serif" font-size="6.5" text-anchor="middle" fill="#1a5c3a" font-weight="600">Education</text>
+          <rect x="144" y="180" width="112" height="34" rx="4" fill="#fff8ee" stroke="#f0ddb8" stroke-width="1"/>
+          <text x="200" y="197" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#e8a020">🍽</text>
+          <text x="200" y="208" font-family="sans-serif" font-size="6.5" text-anchor="middle" fill="#e8a020" font-weight="600">Food Security</text>
+          <rect x="274" y="180" width="112" height="34" rx="4" fill="#eef5ff" stroke="#c8daf5" stroke-width="1"/>
+          <text x="330" y="197" font-family="sans-serif" font-size="10" text-anchor="middle" fill="#1a5c8c">🏥</text>
+          <text x="330" y="208" font-family="sans-serif" font-size="6.5" text-anchor="middle" fill="#1a5c8c" font-weight="600">Healthcare</text>
+        </svg>
+      </div>
+      <p class="project-desc">A charity website designed to inspire support and donations. Clean, trustworthy design that communicates impact and connects donors to the cause.</p>
+      <div class="project-stack">
+        <span>HTML/CSS/JS</span>
+        <span>Non-profit</span>
+        <span>UI Design</span>
+      </div>
+      <div class="project-arrow">View Project →</div>
+    </div>
+
+    <!-- Personal Portfolio -->
+    <div class="project-card reveal">
+      <span class="project-badge">Active · This Site</span>
+      <h3 class="project-title">Personal Portfolio</h3>
+      <!-- mockup -->
+      <div class="project-preview" style="margin-bottom:16px">
+        <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- bg -->
+          <rect width="400" height="220" fill="#0b1a2e"/>
+          <!-- dot grid -->
+          <g opacity=".04">
+            <line x1="0" y1="20" x2="400" y2="20" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="0" y1="40" x2="400" y2="40" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="0" y1="60" x2="400" y2="60" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="0" y1="80" x2="400" y2="80" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="0" y1="100" x2="400" y2="100" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="40" y1="0" x2="40" y2="220" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="80" y1="0" x2="80" y2="220" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="120" y1="0" x2="120" y2="220" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="160" y1="0" x2="160" y2="220" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="200" y1="0" x2="200" y2="220" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="240" y1="0" x2="240" y2="220" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="280" y1="0" x2="280" y2="220" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="320" y1="0" x2="320" y2="220" stroke="#c8a84b" stroke-width=".5"/>
+            <line x1="360" y1="0" x2="360" y2="220" stroke="#c8a84b" stroke-width=".5"/>
+          </g>
+          <!-- nav bar -->
+          <rect width="400" height="28" fill="rgba(11,26,46,0.9)"/>
+          <rect x="14" y="8" width="20" height="12" rx="1" fill="none"/>
+          <text x="14" y="19" font-family="serif" font-size="10" fill="#c8a84b" font-weight="700">DDM</text>
+          <rect x="280" y="10" width="22" height="8" rx="2" fill="#1e2e48"/>
+          <rect x="308" y="10" width="22" height="8" rx="2" fill="#1e2e48"/>
+          <rect x="336" y="10" width="22" height="8" rx="2" fill="#c8a84b"/>
+          <text x="339" y="17" font-family="sans-serif" font-size="5.5" fill="#0b1a2e" font-weight="700">Contact</text>
+          <!-- hero text -->
+          <text x="18" y="52" font-family="sans-serif" font-size="6" fill="#c8a84b" letter-spacing="2">AVAILABLE FOR PROJECTS</text>
+          <rect x="18" y="58" width="155" height="14" rx="2" fill="#ffffff" opacity=".92"/>
+          <rect x="18" y="76" width="110" height="10" rx="2" fill="#c8a84b" opacity=".8"/>
+          <rect x="18" y="92" width="170" height="4" rx="1" fill="#1e2e48"/>
+          <rect x="18" y="100" width="140" height="4" rx="1" fill="#1e2e48"/>
+          <!-- pills -->
+          <rect x="18" y="112" width="56" height="12" rx="6" fill="none" stroke="rgba(200,168,75,0.3)" stroke-width="1"/>
+          <text x="22" y="121" font-family="sans-serif" font-size="5.5" fill="#c8a84b">HTML/CSS/JS</text>
+          <rect x="80" y="112" width="42" height="12" rx="6" fill="none" stroke="rgba(200,168,75,0.3)" stroke-width="1"/>
+          <text x="84" y="121" font-family="sans-serif" font-size="5.5" fill="#c8a84b">Forex/Crypto</text>
+          <!-- CTA buttons -->
+          <rect x="18" y="132" width="58" height="16" rx="2" fill="#c8a84b"/>
+          <text x="22" y="143" font-family="sans-serif" font-size="6" font-weight="700" fill="#0b1a2e">View My Work</text>
+          <rect x="82" y="132" width="48" height="16" rx="2" fill="none" stroke="rgba(200,168,75,0.3)" stroke-width="1"/>
+          <text x="86" y="143" font-family="sans-serif" font-size="6" fill="#f4efe4">Get In Touch</text>
+          <!-- avatar circle -->
+          <circle cx="320" cy="100" r="58" fill="none" stroke="rgba(200,168,75,0.1)" stroke-width="1" stroke-dasharray="4 4"/>
+          <circle cx="320" cy="100" r="46" fill="#122040" stroke="rgba(200,168,75,0.2)" stroke-width="1"/>
+          <text x="320" y="106" font-family="serif" font-size="24" text-anchor="middle" fill="#c8a84b" font-weight="300">DDM</text>
+          <!-- section strip -->
+          <rect x="0" y="165" width="400" height="55" fill="#122040"/>
+          <rect x="18" y="174" width="80" height="6" rx="2" fill="#1e2e48"/>
+          <text x="18" y="170" font-family="sans-serif" font-size="5.5" fill="#c8a84b" letter-spacing="2">SERVICES</text>
+          <rect x="18" y="184" width="108" height="28" rx="3" fill="#0b1a2e" stroke="rgba(200,168,75,0.15)" stroke-width="1"/>
+          <text x="28" y="196" font-family="sans-serif" font-size="5.5" fill="#c8a84b">⬡</text>
+          <rect x="38" y="192" width="60" height="4" rx="1" fill="#1e2e48"/>
+          <rect x="38" y="200" width="46" height="3" rx="1" fill="#162030"/>
+          <rect x="142" y="184" width="108" height="28" rx="3" fill="#0b1a2e" stroke="rgba(200,168,75,0.15)" stroke-width="1"/>
+          <text x="152" y="196" font-family="sans-serif" font-size="5.5" fill="#c8a84b">◈</text>
+          <rect x="162" y="192" width="60" height="4" rx="1" fill="#1e2e48"/>
+          <rect x="162" y="200" width="46" height="3" rx="1" fill="#162030"/>
+          <rect x="266" y="184" width="108" height="28" rx="3" fill="#0b1a2e" stroke="rgba(200,168,75,0.15)" stroke-width="1"/>
+          <text x="276" y="196" font-family="sans-serif" font-size="5.5" fill="#c8a84b">◻</text>
+          <rect x="286" y="192" width="60" height="4" rx="1" fill="#1e2e48"/>
+          <rect x="286" y="200" width="46" height="3" rx="1" fill="#162030"/>
+        </svg>
+      </div>
+      <p class="project-desc">A professional portfolio site showcasing web design, trading, and graphic design work. Built to attract clients and opportunities in Dar es Salaam and beyond.</p>
+      <div class="project-stack">
+        <span>HTML/CSS/JS</span>
+        <span>Portfolio</span>
+        <span>Personal Brand</span>
+      </div>
+      <div class="project-arrow">You're here →</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-label">Get in touch</div>
+    <h2 class="section-heading">Let's work<br><em>together</em></h2>
+    <div class="divider"></div>
+    <p class="reveal">Have a project in mind? Need a landing page, a brand identity, or a custom website? I'm available for freelance work and collaborations.</p>
+    <div class="contact-links reveal">
+      <div class="contact-row">
+        <span class="label">Location</span>
+        <span class="value">Dar es Salaam, Tanzania</span>
+      </div>
+      <div class="contact-row">
+        <span class="label">Available for</span>
+        <span class="value">Web Design · Graphic Design · Collaborations</span>
+      </div>
+      <div class="contact-row">
+        <span class="label">Email</span>
+        <span class="value">dzungtech26@gmail.com</span>
+      </div>
+      <div class="contact-row">
+        <span class="label">WhatsApp</span>
+        <span class="value">+255 745 199 576</span>
+      </div>
+    </div>
+    <div class="reveal">
+      <a href="mailto:dzungtech26@gmail.com" class="btn-primary">Send a Message →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Derick Derton Mushi. All rights reserved.</p>
+  <div class="footer-mark">Dzung|Tech</div>
+  <p>Kigamboni, Dar es Salaam, Tanzania</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Nav shrink on scroll
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.padding = window.scrollY > 50 ? '14px 60px' : '20px 60px';
+  });
+</script>
+</body>
+</html>
